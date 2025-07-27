@@ -6,38 +6,46 @@ import { TighterText } from "../ui/header";
 import { NotebookPen } from "lucide-react";
 import { ProgrammingLanguagesDropdown } from "../ui/programming-lang-dropdown";
 import { Button } from "../ui/button";
+import { useAppConfig } from "@/contexts/AppConfigContext";
+import { AppConfigDialog } from "@/components/app-config-dialog";
 
 const QUICK_START_PROMPTS_SEARCH = [
-  "Write a market analysis of AI chip manufacturers in 2025",
-  "Create a blog post about the latest climate change policies and their impact",
-  "Draft an investor update on renewable energy trends this quarter",
-  "Write a report on current cybersecurity threats in cloud computing",
-  "Analyze the latest developments in quantum computing for a tech newsletter",
-  "Create a summary of emerging medical breakthroughs in cancer treatment",
-  "Write about the impact of current interest rates on the housing market",
-  "Draft an article about breakthroughs in battery technology this year",
-  "Analyze current supply chain disruptions in semiconductor manufacturing",
-  "Write about how recent AI regulations affect business innovation",
+  "Research and analyze the latest developments in artificial intelligence regulation across major economies",
+  "Investigate current trends in renewable energy adoption and their economic impact on traditional energy sectors",
+  "Analyze the effects of remote work on urban real estate markets and city planning strategies",
+  "Research breakthrough treatments in cancer immunotherapy and their clinical trial results",
+  "Examine the current state of quantum computing development and its potential business applications",
+  "Investigate the latest cybersecurity threats facing cloud infrastructure and enterprise solutions",
+  "Research the impact of central bank digital currencies (CBDCs) on traditional banking systems",
+  "Analyze emerging supply chain technologies and their role in addressing global logistics challenges",
+  "Study the environmental and economic effects of carbon pricing mechanisms worldwide",
+  "Research advances in gene therapy and CRISPR technology for treating genetic disorders",
+  "Investigate the latest developments in space commercialization and private space exploration",
+  "Analyze the impact of microplastics on marine ecosystems and human health research",
+  "Research current semiconductor industry challenges and technological solutions being developed",
+  "Examine the latest breakthroughs in battery technology and energy storage solutions",
+  "Investigate the effects of social media algorithms on information consumption and democracy",
 ];
 
 const QUICK_START_PROMPTS = [
-  "Write a bedtime story about a brave little robot",
-  "Create a function to calculate Fibonacci numbers in TypeScript",
-  "Draft a resignation letter for a position I've had for 2 years",
-  "Build a simple weather dashboard using React and Tailwind",
-  "Write a poem about artificial intelligence",
-  "Create a basic Express.js REST API with two endpoints",
-  "Draft a congratulatory speech for my sister's graduation",
-  "Build a command-line calculator in Python",
-  "Write instructions for making perfect scrambled eggs",
-  "Create a simple snake game using HTML canvas",
-  "Write me a TODO app in React",
-  "Explain why the sky is blue in a short essay",
-  "Help me draft an email to my professor Craig",
-  "Write a web scraping program in Python",
+  "Write a compelling short story about AI consciousness awakening in a smart city",
+  "Create a comprehensive guide to building a sustainable indoor garden ecosystem", 
+  "Draft a professional proposal for implementing remote work policies in traditional companies",
+  "Build a TypeScript application for tracking personal carbon footprint with data visualization",
+  "Write an inspiring speech about the future of human-AI collaboration",
+  "Create a Python script for automated email management and intelligent filtering",
+  "Design a React component library for accessible web interfaces",
+  "Write a detailed analysis of emerging technologies that will shape the next decade",
+  "Create a personal finance tracker with React and implement goal-setting features",
+  "Draft a comprehensive business plan for a sustainable technology startup",
+  "Build a command-line tool for developer productivity optimization",
+  "Write a creative manifesto on the intersection of art and technology",
+  "Create a full-stack web application for community resource sharing",
+  "Design an API for real-time collaboration features in creative software",
+  "Write a technical deep-dive into modern web performance optimization strategies",
 ];
 
-function getRandomPrompts(prompts: string[], count: number = 4): string[] {
+function getRandomPrompts(prompts: string[], count: number = 6): string[] {
   return [...prompts].sort(() => Math.random() - 0.5).slice(0, count);
 }
 
@@ -74,15 +82,15 @@ const QuickStartPrompts = ({ searchEnabled }: QuickStartPromptsProps) => {
 
   return (
     <div className="flex flex-col w-full gap-2">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 w-full">
         {selectedPrompts.map((prompt, index) => (
           <Button
             key={`quick-start-prompt-${index}`}
             onClick={() => handleClick(prompt)}
             variant="outline"
-            className="min-h-[60px] w-full flex items-center justify-center p-6 whitespace-normal text-gray-500 hover:text-gray-700 transition-colors ease-in rounded-2xl"
+            className="min-h-[80px] w-full flex items-center justify-center p-4 whitespace-normal text-gray-500 hover:text-gray-700 transition-colors ease-in rounded-2xl text-xs leading-relaxed"
           >
-            <p className="text-center break-words text-sm font-normal">
+            <p className="text-center break-words font-normal">
               {prompt}
             </p>
           </Button>
@@ -134,16 +142,25 @@ interface ThreadWelcomeProps {
 export const ThreadWelcome: FC<ThreadWelcomeProps> = (
   props: ThreadWelcomeProps
 ) => {
+  const { config } = useAppConfig();
+
   return (
     <ThreadPrimitive.Empty>
       <div className="flex items-center justify-center mt-16 w-full">
         <div className="text-center max-w-3xl w-full">
+          <div className="flex items-center justify-center mb-4">
+            <AppConfigDialog />
+          </div>
           <Avatar className="mx-auto">
-            <AvatarImage src="/lc_logo.jpg" alt="LangChain Logo" />
-            <AvatarFallback>LC</AvatarFallback>
+            {config.logoUrl ? (
+              <AvatarImage src={config.logoUrl} alt={`${config.appName} Logo`} />
+            ) : (
+              <AvatarImage src="/lc_logo.jpg" alt="Logo" />
+            )}
+            <AvatarFallback>{config.appName.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <TighterText className="mt-4 text-lg font-medium">
-            What would you like to write today?
+            {config.customBranding.welcomeMessage || `What would you like to write today?`}
           </TighterText>
           <div className="mt-8 w-full">
             <QuickStartButtons

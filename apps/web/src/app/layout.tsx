@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata: Metadata = {
-  title: "Open Canvas",
-  description: "Open Canvas Chat UX by LangChain",
+  title: "CALW",
+  description: "CALW - Next-Generation AI Research & Collaboration Platform",
 };
 
 export default function RootLayout({

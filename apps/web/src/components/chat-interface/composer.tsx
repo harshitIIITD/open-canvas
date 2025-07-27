@@ -2,6 +2,7 @@
 
 import { ComposerPrimitive, ThreadPrimitive } from "@assistant-ui/react";
 import { type FC, useState, useEffect } from "react";
+import { useAppConfig } from "@/contexts/AppConfigContext";
 
 import { TooltipIconButton } from "@/components/ui/assistant-ui/tooltip-icon-button";
 import { SendHorizontalIcon } from "lucide-react";
@@ -10,29 +11,29 @@ import { ComposerAttachments } from "../assistant-ui/attachment";
 import { ComposerActionsPopOut } from "./composer-actions-popout";
 
 const GENERIC_PLACEHOLDERS = [
-  "Share your big idea and let's write something amazing",
-  "Type your vision for the next great piece of content",
-  "Your masterpiece begins with this prompt",
-  "What would you like us to write about today?",
-  "Drop your content idea here and let's create",
-  "Your next great piece starts with this prompt",
-  "Share your story idea and watch it unfold",
-  "Let's write something incredible - start here",
-  "Your writing journey begins with this prompt",
-  "Turn your idea into content magic - start here",
+  "Share your big idea and let's research it together",
+  "What would you like me to research and write about?",
+  "Your masterpiece begins with intelligent research",
+  "Ask me anything - I'll find the latest sources",
+  "Turn your curiosity into comprehensive content",
+  "Research any topic with AI-powered insights",
+  "Your next breakthrough starts with a question",
+  "Let's explore ideas with real-time information",
+  "Research, analyze, and create in one place",
+  "Transform questions into researched content",
 ];
 
 const SEARCH_PLACEHOLDERS = [
-  "Share your topic - I'll add live data",
-  "Write about anything - I'll find sources",
-  "Your idea + fresh research = great content",
-  "Start here with real-time facts",
-  "Topic here for data-rich content",
-  "Create with current insights",
-  "Write now with live sources",
-  "Your story + fresh data",
-  "Ideas welcome - research ready",
-  "Start fresh with live facts",
+  "Research any topic with live data and sources",
+  "Ask me to investigate and I'll cite everything", 
+  "Deep research with real-time fact-checking",
+  "Comprehensive analysis with source verification",
+  "Your research assistant with citation powers",
+  "Live data research with academic standards",
+  "Fact-based content with transparent sourcing",
+  "Research-grade analysis in real-time",
+  "Evidence-based writing with live sources",
+  "Professional research with citation tracking",
 ];
 
 const getRandomPlaceholder = (searchEnabled: boolean) => {
@@ -66,11 +67,17 @@ interface ComposerProps {
 }
 
 export const Composer: FC<ComposerProps> = (props: ComposerProps) => {
+  const { config } = useAppConfig();
   const [placeholder, setPlaceholder] = useState("");
 
   useEffect(() => {
-    setPlaceholder(getRandomPlaceholder(props.searchEnabled));
-  }, [props.searchEnabled]);
+    // Use custom placeholder if configured, otherwise use random default
+    if (config.customBranding.placeholderText) {
+      setPlaceholder(config.customBranding.placeholderText);
+    } else {
+      setPlaceholder(getRandomPlaceholder(props.searchEnabled));
+    }
+  }, [props.searchEnabled, config.customBranding.placeholderText]);
 
   return (
     <DragAndDropWrapper>

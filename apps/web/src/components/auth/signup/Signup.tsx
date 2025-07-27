@@ -7,6 +7,7 @@ import { UserAuthForm } from "./user-auth-form-signup";
 import { signup } from "./actions";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useAppConfig } from "@/contexts/AppConfigContext";
 
 export interface SignupWithEmailInput {
   email: string;
@@ -17,6 +18,7 @@ export function Signup() {
   const [isError, setIsError] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { config } = useAppConfig();
 
   useEffect(() => {
     const error = searchParams.get("error");
@@ -68,14 +70,24 @@ export function Signup() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex gap-1 items-center text-lg font-medium">
-          <NextImage
-            src="/lc_logo.jpg"
-            width={36}
-            height={36}
-            alt="LangChain Logo"
-            className="rounded-full"
-          />
-          Open Canvas
+          {config.logoUrl ? (
+            <NextImage
+              src={config.logoUrl}
+              width={36}
+              height={36}
+              alt={`${config.appName} Logo`}
+              className="rounded-full"
+            />
+          ) : (
+            <NextImage
+              src="/lc_logo.jpg"
+              width={36}
+              height={36}
+              alt={`${config.appName} Logo`}
+              className="rounded-full"
+            />
+          )}
+          {config.appName}
         </div>
       </div>
       <div className="lg:p-8">
